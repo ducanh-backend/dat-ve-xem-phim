@@ -1,0 +1,39 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title', 'Chi Tiết Phim - Ticket Box'); ?>
+
+<?php $this->startSection('content'); ?>
+<nav aria-label="breadcrumb">
+ <ol class="breadcrumb">
+ <li class="breadcrumb-item"><a href="/ASSGD1/" class="text-warning text-decoration-none">Trang chủ</a></li>
+ <li class="breadcrumb-item"><a href="/ASSGD1/movies" class="text-warning text-decoration-none">Phim</a></li>
+ <li class="breadcrumb-item active text-white" aria-current="page">Chi tiết phim</li>
+ </ol>
+</nav>
+
+<div class="row mt-4">
+ <div class="col-md-4 mb-4">
+ <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=500&auto=format&fit=crop" class="img-fluid rounded border border-warning shadow" alt="Poster">
+ </div>
+ <div class="col-md-8">
+ <h1 class="text-warning fw-bold">SIÊU ANH HÙNG TRỞ LẠI</h1>
+ <p class="text-muted">Đạo diễn: <strong>Christopher Nolan</strong> | Thời lượng: <strong>145 Phút</strong></p>
+ <p class="text-muted">Thể loại: <span class="badge bg-secondary">Hành động</span> <span class="badge bg-secondary">Viễn tưởng</span></p>
+ 
+ <h5 class="mt-4 border-bottom border-secondary pb-2">Nội dung phim</h5>
+ <p style="line-height: 1.8;">
+ Trái đất đang đứng trước nguy cơ diệt vong bởi một thế lực bóng tối đến từ vũ trụ. Những siêu anh hùng đã quy ẩn nay phải tập hợp lại một lần nữa để đối phó với kẻ thù không đội trời chung...
+ </p>
+
+ <h5 class="mt-4 border-bottom border-secondary pb-2">Trailer</h5>
+ <!-- Chèn một iframe youtube mẫu -->
+ <div class="ratio ratio-16x9 mb-4">
+ <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video" allowfullscreen class="rounded border border-secondary"></iframe>
+ </div>
+
+ <a href="/ASSGD1/booking/seat" class="btn btn-warning btn-lg fw-bold w-100 py-3 mt-2">MUA VÉ NGAY</a>
+ </div>
+</div>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layout.app'); } ?>

@@ -1,0 +1,41 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title', 'Liên Hệ - Ticket Box'); ?>
+
+<?php $this->startSection('content'); ?>
+<div class="row">
+ <div class="col-md-6 mb-4">
+ <h2 class="text-warning mb-4">LIÊN HỆ VỚI CHÚNG TÔI</h2>
+ <p class="text-muted mb-4">Nếu bạn có bất kỳ thắc mắc nào về việc đặt vé, lịch chiếu hay góp ý dịch vụ, vui lòng điền vào form bên dưới. Chúng tôi sẽ phản hồi sớm nhất có thể.</p>
+ 
+ <form>
+ <div class="mb-3">
+ <label class="form-label text-white">Tên của bạn</label>
+ <input type="text" class="form-control bg-dark border-secondary text-white">
+ </div>
+ <div class="mb-3">
+ <label class="form-label text-white">Email</label>
+ <input type="email" class="form-control bg-dark border-secondary text-white">
+ </div>
+ <div class="mb-3">
+ <label class="form-label text-white">Nội dung tin nhắn</label>
+ <textarea class="form-control bg-dark border-secondary text-white" rows="5"></textarea>
+ </div>
+ <button class="btn btn-warning px-4 fw-bold">GỬI TIN NHẮN</button>
+ </form>
+ </div>
+ <div class="col-md-6">
+ <h4 class="text-white mb-3">Thông tin liên lạc</h4>
+ <ul class="list-unstyled text-muted mb-4">
+ <li class="mb-2">📍 Địa chỉ: 123 Đường Phim Ảnh, Quận 1, TP.HCM</li>
+ <li class="mb-2">📞 Điện thoại: 1900 1234 56</li>
+ <li class="mb-2">✉️ Email: support@ticketbox.com</li>
+ </ul>
+ 
+ <!-- Bản đồ tĩnh bằng hình ảnh -->
+ <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=600&auto=format&fit=crop" class="img-fluid rounded border border-secondary" alt="Map">
+ </div>
+</div>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layout.app'); } ?>

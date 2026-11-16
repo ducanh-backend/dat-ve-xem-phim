@@ -1,0 +1,121 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title', 'Chọn Ghế - Ticket Box'); ?>
+
+<?php $this->startSection('content'); ?>
+<div class="text-center mb-5">
+ <h2 class="text-warning">CHỌN GHẾ NGỒI</h2>
+ <p class="text-muted">Phim: <strong>SIÊU ANH HÙNG TRỞ LẠI</strong> | Suất chiếu: <strong>19:30 - Hôm nay</strong></p>
+</div>
+
+<div class="row justify-content-center">
+ <div class="col-md-8">
+ <!-- Màn hình chiếu -->
+ <div class="bg-secondary rounded p-2 text-center text-dark fw-bold mb-5 shadow" style="transform: perspective(200px) rotateX(-5deg);">
+ MÀN HÌNH CHÍNH
+ </div>
+
+ <!-- Sơ đồ ghế (Mô phỏng tĩnh bằng Grid) -->
+ <div class="d-flex flex-column align-items-center gap-2">
+ <?php $__currentLoopData = ['A', 'B', 'C', 'D', 'E']; $this->addLoop($__currentLoopData);$this->getFirstLoop();
+ foreach($__currentLoopData as $row): $loop = $this->incrementLoopIndices();  ?>
+ <div class="d-flex gap-2 align-items-center">
+ <strong class="me-3"><?php echo \htmlentities($row??'', ENT_QUOTES, 'UTF-8', false); ?></strong>
+ <?php for($col = 1; $col <= 10; $col++): ?>
+ <?php 
+ // Vài ghế đã được mua tĩnh
+ $isBooked = ($row == 'B' && $col == 5) || ($row == 'C' && $col == 7) || ($row == 'D' && $col == 4);
+ ?>
+
+ <?php if($isBooked): ?>
+ <div class="seat bg-danger rounded text-center text-white p-1" style="width: 35px; height: 35px; opacity: 0.5; cursor: not-allowed; font-size: 12px; line-height: 25px;"><?php echo \htmlentities($col??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <?php else: ?>
+ <!-- Ghế trống, thêm class .seat-available để bắt sự kiện click -->
+ <div class="seat seat-available bg-dark rounded text-center text-white p-1 border border-secondary seat-hover" data-seat="<?php echo \htmlentities($row??'', ENT_QUOTES, 'UTF-8', false); ?><?php echo \htmlentities($col??'', ENT_QUOTES, 'UTF-8', false); ?>" style="width: 35px; height: 35px; cursor: pointer; font-size: 12px; line-height: 25px;"><?php echo \htmlentities($col??'', ENT_QUOTES, 'UTF-8', false); ?></div>
+ <?php endif; ?>
+ <?php endfor; ?>
+ </div>
+ <?php endforeach; $this->popLoop(); $loop = $this->getFirstLoop(); ?>
+ </div>
+
+ <!-- Chú thích -->
+ <div class="d-flex justify-content-center gap-4 mt-5">
+ <div class="d-flex align-items-center"><div class="bg-dark border border-secondary rounded me-2" style="width: 20px; height: 20px;"></div> Ghế trống</div>
+ <div class="d-flex align-items-center"><div class="bg-warning rounded me-2" style="width: 20px; height: 20px;"></div> Đang chọn</div>
+ <div class="d-flex align-items-center"><div class="bg-danger rounded me-2" style="width: 20px; height: 20px; opacity: 0.5;"></div> Đã bán</div>
+ </div>
+ 
+ <!-- Hiển thị ghế đang chọn -->
+ <div class="mt-4 text-center">
+ <h5 class="text-white">Ghế đang chọn: <span id="selected-seats-display" class="text-warning">Chưa chọn ghế</span></h5>
+ </div>
+
+ <div class="text-center mt-5">
+ <a href="/ASSGD1/movie/1" class="btn btn-outline-secondary me-2">Quay lại</a>
+ <a href="/ASSGD1/booking/checkout" id="btn-checkout" class="btn btn-warning px-5 fw-bold">TIẾP TỤC THANH TOÁN</a>
+ </div>
+ </div>
+</div>
+
+<style>
+ /* CSS cho ghế khi được hover hoặc được chọn */
+ .seat-hover:hover {
+ background-color: #ffc107 !important;
+ color: black !important;
+ border-color: #ffc107 !important;
+ }
+ .seat-selected {
+ background-color: #ffc107 !important;
+ color: black !important;
+ border-color: #ffc107 !important;
+ font-weight: bold;
+ }
+</style>
+
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+ const availableSeats = document.querySelectorAll('.seat-available');
+ const displaySpan = document.getElementById('selected-seats-display');
+ const btnCheckout = document.getElementById('btn-checkout');
+ let selectedSeats = [];
+
+ // Xóa dữ liệu cũ nếu người dùng quay lại trang chọn ghế
+ localStorage.removeItem('ticketbox_seats');
+
+ availableSeats.forEach(seat => {
+ seat.addEventListener('click', function() {
+ const seatId = this.getAttribute('data-seat');
+ 
+ this.classList.toggle('seat-selected');
+ this.classList.toggle('bg-dark');
+ this.classList.toggle('text-white');
+ 
+ if (this.classList.contains('seat-selected')) {
+ selectedSeats.push(seatId);
+ } else {
+ selectedSeats = selectedSeats.filter(id => id !== seatId);
+ }
+
+ if (selectedSeats.length > 0) {
+ displaySpan.innerText = selectedSeats.join(', ');
+ } else {
+ displaySpan.innerText = "Chưa chọn ghế";
+ }
+ });
+ });
+
+ // Xử lý khi bấm nút thanh toán
+ btnCheckout.addEventListener('click', function(e) {
+ if (selectedSeats.length === 0) {
+ e.preventDefault(); // Ngăn không cho chuyển trang
+ alert('Vui lòng chọn ít nhất 1 ghế để tiếp tục!');
+ } else {
+ // Lưu danh sách ghế vào Local Storage của trình duyệt (Không cần Database)
+ localStorage.setItem('ticketbox_seats', JSON.stringify(selectedSeats));
+ }
+ });
+ });
+</script>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layout.app'); } ?>

@@ -1,0 +1,11 @@
+{
+    "require": {
+        "eftec/bladeone": "*",
+        "bramus/router": "~1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

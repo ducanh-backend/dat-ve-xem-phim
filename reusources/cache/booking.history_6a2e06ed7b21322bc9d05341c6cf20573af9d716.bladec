@@ -1,0 +1,107 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title', 'Vé Của Tôi - Ticket Box'); ?>
+
+<?php $this->startSection('content'); ?>
+<h2 class="mb-4 text-warning border-bottom border-secondary pb-2">VÉ CỦA TÔI (LỊCH SỬ ĐẶT VÉ)</h2>
+
+<!-- Khu vực render dynamic -->
+<div id="orders-container" class="row">
+ <!-- Sẽ được điền bằng JavaScript -->
+</div>
+
+<!-- Trạng thái trống -->
+<div id="no-orders" class="text-center py-5" style="display: none;">
+ <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="#6c757d" class="bi bi-ticket-perforated mb-4" viewBox="0 0 16 16">
+ <path d="M4 4.85v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.9v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.9v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.9v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Z"/>
+ <path d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13ZM1 4.5a.5.5 0 0 1 .5-.5H3v.9H2v.9h1v.9H2v.9h1v.9H2v.9h1V12H1.5a.5.5 0 0 1-.5-.5V10.1a2.5 2.5 0 0 0 0-4.2V4.5Zm12 7a.5.5 0 0 1-.5.5H4V12h-.91v-.9H4v-.9h-.91v-.9H4v-.9h-.91v-.9H4v-.9h-.91V5H4v-.9H3.09V3H14.5a.5.5 0 0 1 .5.5V5.9a2.5 2.5 0 0 0 0 4.2V11.5Z"/>
+ </svg>
+ <h4 class="text-secondary">Bạn chưa có đơn đặt vé nào</h4>
+ <p class="text-muted mb-4">Hãy chọn một bộ phim và bắt đầu đặt vé ngay!</p>
+ <a href="/ASSGD1/movies" class="btn btn-warning fw-bold px-5">Xem Phim Ngay</a>
+</div>
+
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+ let orders = JSON.parse(localStorage.getItem('ticketbox_orders')) || [];
+ const container = document.getElementById('orders-container');
+ const noOrders = document.getElementById('no-orders');
+
+ if (orders.length === 0) {
+ noOrders.style.display = 'block';
+ return;
+ }
+
+ orders.forEach(function(order, index) {
+ let seatNames = order.seats.map(s => s.id).join(', ');
+ let bookedDate = order.date || 'Không rõ';
+
+ let isLatest = (index === 0);
+ let badgeClass = isLatest ? 'bg-success' : 'bg-secondary';
+ let badgeText = isLatest ? 'Sắp chiếu' : 'Đã xem';
+ let cardClass = isLatest
+ ? 'card bg-black border-warning text-white shadow-sm h-100'
+ : 'card bg-dark border-secondary text-white h-100';
+ let titleClass = isLatest ? 'text-warning' : 'text-secondary';
+ let imgStyle = isLatest ? '' : 'filter: grayscale(50%);';
+ let qrBtnClass = isLatest ? 'btn btn-sm btn-outline-warning' : 'btn btn-sm btn-secondary';
+ let qrBtnDisabled = isLatest ? '' : 'disabled';
+ let cardOpacity = isLatest ? '' : 'opacity: 0.85;';
+
+ let html = `
+ <div class="col-md-6 mb-4">
+ <div class="${cardClass}" style="${cardOpacity}">
+ <div class="row g-0 h-100">
+ <div class="col-md-4">
+ <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=500&auto=format&fit=crop"
+ class="img-fluid rounded-start h-100"
+ style="object-fit: cover; ${imgStyle}"
+ alt="Poster">
+ </div>
+ <div class="col-md-8">
+ <div class="card-body">
+ <div class="d-flex justify-content-between align-items-center mb-2">
+ <h5 class="card-title ${titleClass} fw-bold mb-0">${order.movie}</h5>
+ <span class="badge ${badgeClass}">${badgeText}</span>
+ </div>
+ <p class="card-text text-muted small mb-3">Ngày đặt: ${bookedDate}</p>
+
+ <p class="mb-1"><small class="text-muted">Mã vé:</small> <strong class="text-warning" style="font-size: 12px;">${order.id}</strong></p>
+ <p class="mb-1"><small class="text-muted">Rạp:</small> <strong>${order.cinema}</strong></p>
+ <p class="mb-1"><small class="text-muted">Suất chiếu:</small> <strong>${order.showtime} | ${bookedDate}</strong></p>
+ <p class="mb-2"><small class="text-muted">Ghế:</small> <strong class="text-danger">${seatNames}</strong></p>
+
+ <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary">
+ <div>
+ <small class="text-muted">Tổng tiền:</small><br>
+ <strong class="${isLatest ? 'text-warning' : ''}">${order.total.toLocaleString('vi-VN')} VNĐ</strong>
+ </div>
+ <button class="${qrBtnClass}" ${qrBtnDisabled}
+ onclick="showQR('${order.id}')" ${isLatest ? '' : 'style="cursor: not-allowed;"'}>Mã QR</button>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>`;
+
+ container.innerHTML += html;
+ });
+ });
+
+ function showQR(orderId) {
+ Swal.fire({
+ title: 'Mã QR Vé',
+ html: `<p class="text-muted mb-3">Mã vé: <strong>${orderId}</strong></p>
+ <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${orderId}&bgcolor=ffffff&color=000000"
+ class="rounded p-2 bg-white" style="width: 200px; height: 200px;" alt="QR Code">`,
+ background: '#111',
+ color: '#fff',
+ confirmButtonColor: '#d4af37',
+ confirmButtonText: 'Đóng'
+ });
+ }
+</script>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layout.app'); } ?>

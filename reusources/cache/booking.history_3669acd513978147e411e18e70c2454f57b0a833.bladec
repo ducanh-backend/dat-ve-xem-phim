@@ -1,0 +1,85 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title', 'Vé Của Tôi - Ticket Box'); ?>
+
+<?php $this->startSection('content'); ?>
+<h2 class="mb-4 text-warning border-bottom border-secondary pb-2">VÉ CỦA TÔI (LỊCH SỬ ĐẶT VÉ)</h2>
+
+<div class="row">
+ <!-- Vé vừa đặt gần nhất (lấy từ LocalStorage để đồng bộ) -->
+ <div class="col-md-6 mb-4">
+ <div class="card bg-black border-warning text-white shadow-sm h-100">
+ <div class="row g-0 h-100">
+ <div class="col-md-4">
+ <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=500&auto=format&fit=crop" class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="Poster">
+ </div>
+ <div class="col-md-8">
+ <div class="card-body">
+ <div class="d-flex justify-content-between align-items-center mb-2">
+ <h5 class="card-title text-warning fw-bold mb-0">SIÊU ANH HÙNG TRỞ LẠI</h5>
+ <span class="badge bg-success">Sắp chiếu</span>
+ </div>
+ <p class="card-text text-muted small mb-3">Ngày đặt: Hôm nay</p>
+ 
+ <p class="mb-1"><small class="text-muted">Rạp:</small> <strong>Ticket Box Quận 1</strong></p>
+ <p class="mb-1"><small class="text-muted">Suất chiếu:</small> <strong>19:30 | Hôm nay</strong></p>
+ <p class="mb-2"><small class="text-muted">Ghế:</small> <strong class="text-danger" id="history-seats">Đang tải...</strong></p>
+ 
+ <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary">
+ <div>
+ <small class="text-muted">Tổng tiền:</small><br>
+ <strong class="text-warning"><span id="history-total">0</span> VNĐ</strong>
+ </div>
+ <button class="btn btn-sm btn-outline-warning">Mã QR</button>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Vé đã xem (Tĩnh) -->
+ <div class="col-md-6 mb-4">
+ <div class="card bg-dark border-secondary text-white h-100" style="opacity: 0.8;">
+ <div class="row g-0 h-100">
+ <div class="col-md-4">
+ <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=500&auto=format&fit=crop" class="img-fluid rounded-start h-100" style="object-fit: cover; filter: grayscale(50%);" alt="Poster">
+ </div>
+ <div class="col-md-8">
+ <div class="card-body">
+ <div class="d-flex justify-content-between align-items-center mb-2">
+ <h5 class="card-title text-secondary fw-bold mb-0">TÌNH YÊU NĂM ẤY</h5>
+ <span class="badge bg-secondary">Đã xem</span>
+ </div>
+ <p class="card-text text-muted small mb-3">Ngày đặt: 12/10/2026</p>
+ 
+ <p class="mb-1"><small class="text-muted">Rạp:</small> <strong>Ticket Box Gò Vấp</strong></p>
+ <p class="mb-1"><small class="text-muted">Suất chiếu:</small> <strong>20:00 | 14/10/2026</strong></p>
+ <p class="mb-2"><small class="text-muted">Ghế:</small> <strong>G8, G9</strong></p>
+ 
+ <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top border-secondary">
+ <div>
+ <small class="text-muted">Tổng tiền:</small><br>
+ <strong>170.000 VNĐ</strong>
+ </div>
+ <button class="btn btn-sm btn-secondary" disabled>Mã QR</button>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+ let seats = JSON.parse(localStorage.getItem('ticketbox_seats')) || ['D5', 'D6'];
+ document.getElementById('history-seats').innerText = seats.join(', ');
+ 
+ let total = seats.length * 90000;
+ document.getElementById('history-total').innerText = total.toLocaleString('vi-VN');
+ });
+</script>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layout.app'); } ?>

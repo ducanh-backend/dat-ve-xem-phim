@@ -1,0 +1,60 @@
+@extends('layout.app')
+
+@section('title', 'Liên Hệ - Ticket Box')
+
+@section('content')
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card card-custom p-4 shadow-sm h-100">
+            <h3 class="fw-bold mb-3 text-dark d-flex align-items-center">
+                <i class="bi bi-chat-dots-fill text-primary me-2"></i> LIÊN HỆ VỚI CHÚNG TÔI
+            </h3>
+            <p class="text-secondary mb-4">Nếu bạn có bất kỳ thắc mắc nào về lịch chiếu, dịch vụ đặt vé hoặc hợp tác, hãy điền thông tin bên dưới. Đội ngũ VNBox sẽ hỗ trợ bạn nhanh chóng trong vòng 24 giờ.</p>
+            
+            <form onsubmit="event.preventDefault(); Swal.fire({ icon: 'success', title: 'Gửi thành công!', text: 'Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất!', background: '#ffffff', color: '#0f172a', confirmButtonColor: '#4f46e5' }); this.reset();">
+                <div class="mb-3">
+                    <label class="form-label">Họ và tên của bạn <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" placeholder="VD: Nguyễn Văn A" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Địa chỉ Email liên hệ <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" placeholder="email@example.com" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Nội dung tin nhắn <span class="text-danger">*</span></label>
+                    <textarea class="form-control" rows="4" placeholder="Nhập câu hỏi hoặc góp ý của bạn tại đây..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-warning px-4 fw-bold shadow text-white">
+                    <i class="bi bi-send-fill me-1"></i> GỬI TIN NHẮN
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card card-custom p-4 shadow-sm h-100 d-flex flex-column justify-content-between">
+            <div>
+                <h4 class="fw-bold text-dark mb-4 pb-2 border-bottom">Thông Tin Hỗ Trợ Khách Hàng</h4>
+                <ul class="list-unstyled text-secondary mb-4 fs-6">
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="bi bi-geo-alt-fill text-primary me-3 fs-5"></i>
+                        <span>123 Đường Điện Ảnh, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="bi bi-telephone-fill text-primary me-3 fs-5"></i>
+                        <span>Hotline: <strong class="text-dark">1900 1234 56</strong> (8:00 - 23:00 hàng ngày)</span>
+                    </li>
+                    <li class="mb-3 d-flex align-items-center">
+                        <i class="bi bi-envelope-fill text-primary me-3 fs-5"></i>
+                        <span>Email: <strong class="text-dark">support@ticketbox.com</strong></span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="rounded-3 overflow-hidden border shadow-sm">
+                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800&auto=format&fit=crop" class="img-fluid w-100" style="max-height: 250px; object-fit: cover;" alt="Location Map">
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

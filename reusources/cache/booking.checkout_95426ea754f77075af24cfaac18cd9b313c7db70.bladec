@@ -1,0 +1,91 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title', 'Thanh Toán - Ticket Box'); ?>
+
+<?php $this->startSection('content'); ?>
+<h2 class="mb-4 text-warning border-bottom border-secondary pb-2">XÁC NHẬN THANH TOÁN</h2>
+
+<div class="row">
+ <!-- Form thông tin -->
+ <div class="col-md-7 mb-4">
+ <div class="bg-black p-4 rounded border border-secondary">
+ <h5 class="text-white mb-4">Thông tin người đặt</h5>
+ <form>
+ <div class="mb-3">
+ <label class="form-label text-muted">Họ và tên</label>
+ <input type="text" class="form-control bg-dark text-white border-secondary" placeholder="Nhập tên của bạn">
+ </div>
+ <div class="mb-3">
+ <label class="form-label text-muted">Số điện thoại</label>
+ <input type="tel" class="form-control bg-dark text-white border-secondary" placeholder="Nhập SĐT">
+ </div>
+ <div class="mb-3">
+ <label class="form-label text-muted">Email</label>
+ <input type="email" class="form-control bg-dark text-white border-secondary" placeholder="Nhập Email để nhận vé">
+ </div>
+ <div class="mb-4">
+ <label class="form-label text-muted">Phương thức thanh toán</label>
+ <select class="form-select bg-dark text-white border-secondary">
+ <option>Thẻ ATM Nội địa / Internet Banking</option>
+ <option>Ví điện tử Momo</option>
+ <option>Ví ZaloPay</option>
+ <option>Thẻ Quốc tế (Visa/Mastercard)</option>
+ </select>
+ </div>
+ <a href="/ASSGD1/booking/success" class="btn btn-warning w-100 fw-bold py-3">XÁC NHẬN ĐẶT VÉ</a>
+ </form>
+ </div>
+ </div>
+
+ <!-- Hóa đơn tóm tắt -->
+ <div class="col-md-5">
+ <div class="card bg-black border-warning text-white">
+ <div class="card-header bg-warning text-dark fw-bold text-center">
+ THÔNG TIN VÉ
+ </div>
+ <div class="card-body">
+ <h5 class="card-title fw-bold">SIÊU ANH HÙNG TRỞ LẠI</h5>
+ <p class="card-text text-muted mb-4">2D Lồng Tiếng</p>
+ 
+ <div class="d-flex justify-content-between mb-2">
+ <span class="text-muted">Rạp:</span>
+ <strong>Ticket Box - Quận 1</strong>
+ </div>
+ <div class="d-flex justify-content-between mb-2">
+ <span class="text-muted">Suất chiếu:</span>
+ <strong>19:30 | Hôm nay</strong>
+ </div>
+ <div class="d-flex justify-content-between mb-2">
+ <span class="text-muted">Phòng chiếu:</span>
+ <strong>Cinema 03</strong>
+ </div>
+ <div class="d-flex justify-content-between mb-4 pb-3 border-bottom border-secondary">
+ <span class="text-muted">Ghế:</span>
+ <strong class="text-warning" id="checkout-seats">Đang tải...</strong>
+ </div>
+
+ <div class="d-flex justify-content-between align-items-center">
+ <span>TỔNG TIỀN:</span>
+ <h3 class="text-warning mb-0"><span id="checkout-total">0</span> VNĐ</h3>
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+ // Lấy dữ liệu ghế từ Local Storage
+ let seats = JSON.parse(localStorage.getItem('ticketbox_seats')) || ['D5', 'D6'];
+ 
+ // Cập nhật tên ghế
+ document.getElementById('checkout-seats').innerText = seats.join(', ');
+ 
+ // Tính tiền (Giả sử 1 vé = 90.000đ)
+ let total = seats.length * 90000;
+ document.getElementById('checkout-total').innerText = total.toLocaleString('vi-VN');
+ });
+</script>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layout.app'); } ?>

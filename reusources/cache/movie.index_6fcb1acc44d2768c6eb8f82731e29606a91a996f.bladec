@@ -1,0 +1,109 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title', 'Tất Cả Phim - Ticket Box'); ?>
+
+<?php $this->startSection('content'); ?>
+<h2 class="mb-4 text-warning border-bottom border-secondary pb-2">TẤT CẢ PHIM ĐANG CHIẾU</h2>
+
+<div class="row">
+ <!-- Sidebar Bộ lọc -->
+ <div class="col-md-3 mb-4">
+ <div class="glass p-4 rounded border-0">
+ <h5 class="text-white mb-3">Lọc Thể Loại</h5>
+ <div class="form-check mb-2">
+ <input class="form-check-input filter-checkbox" type="checkbox" value="hanh-dong" id="filter1" checked>
+ <label class="form-check-label text-muted" for="filter1">Hành Động</label>
+ </div>
+ <div class="form-check mb-2">
+ <input class="form-check-input filter-checkbox" type="checkbox" value="vien-tuong" id="filter2" checked>
+ <label class="form-check-label text-muted" for="filter2">Khoa Học Viễn Tưởng</label>
+ </div>
+ <div class="form-check mb-2">
+ <input class="form-check-input filter-checkbox" type="checkbox" value="tinh-cam" id="filter3" checked>
+ <label class="form-check-label text-muted" for="filter3">Tâm Lý - Tình Cảm</label>
+ </div>
+ </div>
+ </div>
+
+ <!-- Danh sách phim -->
+ <div class="col-md-9">
+ <div class="row row-cols-1 row-cols-md-3 g-4" id="movie-list">
+ <!-- Phim 1 -->
+ <div class="col movie-item" data-category="hanh-dong vien-tuong">
+ <div class="card h-100 movie-card">
+ <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=500&auto=format&fit=crop" class="card-img-top" alt="...">
+ <div class="card-body">
+ <h6 class="card-title text-warning fw-bold">SIÊU ANH HÙNG TRỞ LẠI</h6>
+ <p class="card-text small text-muted">Hành động, Viễn tưởng</p>
+ <a href="/ASSGD1/movie/1" class="btn btn-outline-warning w-100 btn-sm">Chi Tiết / Đặt Vé</a>
+ </div>
+ </div>
+ </div>
+ <!-- Phim 2 -->
+ <div class="col movie-item" data-category="vien-tuong">
+ <div class="card h-100 movie-card">
+ <img src="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=500&auto=format&fit=crop" class="card-img-top" alt="...">
+ <div class="card-body">
+ <h6 class="card-title text-warning fw-bold">BÍ ẨN HÀNH TINH X</h6>
+ <p class="card-text small text-muted">Khoa học viễn tưởng</p>
+ <a href="/ASSGD1/movie/2" class="btn btn-outline-warning w-100 btn-sm">Chi Tiết / Đặt Vé</a>
+ </div>
+ </div>
+ </div>
+ <!-- Phim 3 -->
+ <div class="col movie-item" data-category="hanh-dong">
+ <div class="card h-100 movie-card">
+ <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?q=80&w=500&auto=format&fit=crop" class="card-img-top" alt="...">
+ <div class="card-body">
+ <h6 class="card-title text-warning fw-bold">CHUYẾN ĐI SINH TỬ</h6>
+ <p class="card-text small text-muted">Hành động, Hồi hộp</p>
+ <a href="/ASSGD1/movie/3" class="btn btn-outline-warning w-100 btn-sm">Chi Tiết / Đặt Vé</a>
+ </div>
+ </div>
+ </div>
+ <!-- Phim 4 -->
+ <div class="col movie-item" data-category="tinh-cam">
+ <div class="card h-100 movie-card">
+ <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=500&auto=format&fit=crop" class="card-img-top" alt="...">
+ <div class="card-body">
+ <h6 class="card-title text-warning fw-bold">TÌNH YÊU NĂM ẤY</h6>
+ <p class="card-text small text-muted">Tâm Lý - Tình Cảm</p>
+ <a href="/ASSGD1/movie/4" class="btn btn-outline-warning w-100 btn-sm">Chi Tiết / Đặt Vé</a>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+
+<script>
+ // Xử lý Lọc phim Live (Live Filter)
+ document.addEventListener("DOMContentLoaded", function() {
+ const checkboxes = document.querySelectorAll('.filter-checkbox');
+ const movies = document.querySelectorAll('.movie-item');
+
+ checkboxes.forEach(chk => {
+ chk.addEventListener('change', function() {
+ // Lấy danh sách các thể loại đang được check
+ let checkedCategories = Array.from(checkboxes).filter(i => i.checked).map(i => i.value);
+ 
+ movies.forEach(movie => {
+ let movieCategories = movie.getAttribute('data-category').split(' ');
+ // Kiểm tra xem phim này có thuộc thể loại đang check không
+ let isVisible = movieCategories.some(cat => checkedCategories.includes(cat));
+ 
+ if (isVisible) {
+ movie.style.display = 'block';
+ movie.classList.add('fade-in-up'); // Thêm hiệu ứng hiện lại
+ } else {
+ movie.style.display = 'none';
+ movie.classList.remove('fade-in-up');
+ }
+ });
+ });
+ });
+ });
+</script>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layout.app'); } ?>

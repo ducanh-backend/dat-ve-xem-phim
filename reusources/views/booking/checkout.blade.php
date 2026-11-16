@@ -1,0 +1,145 @@
+@extends('layout.app')
+
+@section('title', 'Thanh Toán - Ticket Box')
+
+@section('content')
+<div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+    <h2 class="fw-bold mb-0 text-dark d-flex align-items-center">
+        <i class="bi bi-credit-card-2-front-fill text-primary me-2"></i>
+        XÁC NHẬN THANH TOÁN VÉ
+    </h2>
+</div>
+
+<div class="row">
+    <!-- Form thông tin -->
+    <div class="col-md-7 mb-4">
+        <div class="card card-custom p-4 shadow-sm">
+            <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom">
+                <i class="bi bi-person-lines-fill text-primary me-2"></i> Thông tin người nhận vé
+            </h5>
+            <form id="checkout-form">
+                <div class="mb-3">
+                    <label class="form-label">Họ và tên người nhận vé <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" placeholder="VD: Nguyễn Văn A" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Số điện thoại liên hệ <span class="text-danger">*</span></label>
+                    <input type="tel" class="form-control" placeholder="VD: 0912345678" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Địa chỉ Email nhận mã vé điện tử <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" placeholder="VD: email@example.com" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Phương thức thanh toán trực tuyến</label>
+                    <select class="form-select">
+                        <option>Ví điện tử MoMo (Khuyên dùng)</option>
+                        <option>Ví điện tử ZaloPay / VNPAY-QR</option>
+                        <option>Thẻ ATM Nội địa / Internet Banking</option>
+                        <option>Thẻ Quốc tế (Visa / Mastercard / JCB)</option>
+                    </select>
+                </div>
+                <button type="submit" id="btn-confirm-checkout" class="btn btn-warning w-100 fw-bold py-3 fs-5 shadow text-white">
+                    <i class="bi bi-shield-lock-fill me-1"></i> XÁC NHẬN & THANH TOÁN
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hóa đơn tóm tắt -->
+    <div class="col-md-5">
+        <div class="card card-custom shadow-sm overflow-hidden" style="border: 1.5px solid #c7d2fe !important;">
+            <div class="card-header bg-primary text-white fw-bold text-center py-3 fs-5" style="background: var(--brand-gradient) !important;">
+                <i class="bi bi-receipt me-1"></i> THÔNG TIN VÉ XEM PHIM
+            </div>
+            <div class="card-body p-4">
+                <h5 class="card-title text-dark fw-bold mb-1">SIÊU ANH HÙNG TRỞ LẠI</h5>
+                <p class="card-text text-secondary mb-4 small">Định dạng: <strong>2D Kỹ Thuật Số - Phụ Đề</strong></p>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary">Rạp chiếu:</span>
+                    <strong class="text-dark">Ticket Box - Cinema 01</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary">Suất chiếu:</span>
+                    <strong class="text-dark">19:30 | Hôm nay</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-secondary">Phòng chiếu:</span>
+                    <strong class="text-dark">Rạp VIP 01</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-secondary">Ghế đã chọn:</span>
+                    <strong class="text-primary fs-6" id="checkout-seats">Đang tải...</strong>
+                </div>
+                <div class="mb-4 pb-3 border-bottom" id="checkout-breakdown">
+                    <!-- Chi tiết vé bằng JS -->
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center pt-2">
+                    <span class="text-dark fw-bold">TỔNG THANH TOÁN:</span>
+                    <h3 class="text-primary fw-bold mb-0"><span id="checkout-total">0</span> đ</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let seatsData = JSON.parse(localStorage.getItem('ticketbox_seats')) || [];
+        
+        if (seatsData.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Chưa chọn ghế',
+                text: 'Vui lòng chọn ghế trước khi tiến hành thanh toán!',
+                background: '#ffffff',
+                color: '#0f172a',
+                confirmButtonColor: '#4f46e5'
+            }).then(() => {
+                window.location.href = "/ASSGD1/booking/seat";
+            });
+            return;
+        }
+
+        // Render tên ghế
+        let seatNames = seatsData.map(s => s.id).join(', ');
+        document.getElementById('checkout-seats').innerText = seatNames;
+        
+        // Render chi tiết
+        let breakdownHTML = '';
+        seatsData.forEach(s => {
+            breakdownHTML += `<div class="d-flex justify-content-between small text-secondary mb-1">
+                                <span>Ghế ${s.id} (${s.type})</span>
+                                <strong class="text-dark">${s.price.toLocaleString('vi-VN')} đ</strong>
+                              </div>`;
+        });
+        document.getElementById('checkout-breakdown').innerHTML = breakdownHTML;
+
+        // Tính tổng tiền
+        let total = seatsData.reduce((sum, s) => sum + s.price, 0);
+        document.getElementById('checkout-total').innerText = total.toLocaleString('vi-VN');
+
+        // Bắt sự kiện thanh toán
+        document.getElementById('checkout-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            Swal.fire({
+                title: 'Đang kết nối cổng thanh toán...',
+                html: '<span class="text-secondary">Vui lòng không tải lại hoặc đóng trình duyệt.</span>',
+                allowOutsideClick: false,
+                background: '#ffffff',
+                color: '#0f172a',
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            setTimeout(() => {
+                window.location.href = "/ASSGD1/booking/success";
+            }, 1800);
+        });
+    });
+</script>
+@endsection
